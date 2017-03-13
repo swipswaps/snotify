@@ -1,0 +1,18 @@
+#+STARTUP: showall
+#+OPTIONS: title:t toc:nil num:nil todo:t
+#+OPTIONS: date:t author:t email:nil creator:nil
+
+#+TITLE: Snotify
+#+DESCRIPTION: Personal music server for stuff that's not on Spotify.
+#+DATE: [2017-03-13 Mon]
+#+AUTHOR: Eric Bailey
+#+EMAIL: eric@ericb.me
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.1.1 (Org mode 9.0.5)
+
+/Personal music server for stuff that's not on Spotify./
+
+* License
+=snotify= is licensed under [[file:LICENSE][The MIT License]].
