@@ -58,6 +58,7 @@ services:
 
   node-exporter:
     image: prom/node-exporter
+    command: --collectors.enabled="conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat"
     expose:
     - 9100
     networks:
