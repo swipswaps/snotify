@@ -31,6 +31,7 @@ services:
     - ${DATA_ROOT}/nginx/certs:/certs
     depends_on:
     - libresonic
+    - grafana
     networks:
     - back-tier
     - front-tier
@@ -86,4 +87,4 @@ services:
     - config.monitoring
     networks:
     - back-tier
-    - front-tier
+    # - front-tier
