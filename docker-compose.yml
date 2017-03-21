@@ -1,5 +1,11 @@
 version: '2'
 
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+
 services:
   libresonic:
     image: wonderfall/libresonic
@@ -7,6 +13,9 @@ services:
     volumes:
     - ${DATA_ROOT}/libresonic/data:/data
     - ${DATA_ROOT}/libresonic/musics:/musics
+    networks:
+    - back-tier
+
   nginx:
     image: wonderfall/boring-nginx
     container_name: nginx
@@ -20,3 +29,61 @@ services:
     - ${DATA_ROOT}/nginx/conf:/conf.d
     - ${DATA_ROOT}/nginx/log:/var/log/nginx
     - ${DATA_ROOT}/nginx/certs:/certs
+    depends_on:
+    - libresonic
+    networks:
+    - back-tier
+    - front-tier
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+    - ${DATA_ROOT}/etc/prometheus:/etc/prometheus/
+    - ${DATA_ROOT}/prometheus:/prometheus
+    command:
+    - '-config.file=/etc/prometheus/prometheus.yml'
+    - '-storage.local.path=/prometheus'
+    expose:
+    - 9090
+    ports:
+    - 9090:9090
+    links:
+    - cadvisor:cadvisor
+    depends_on:
+    - cadvisor
+    networks:
+    - back-tier
+
+  node-exporter:
+    image: prom/node-exporter
+    expose:
+    - 9100
+    networks:
+    - back-tier
+
+  cadvisor:
+    image: google/cadvisor
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    expose:
+    - 8080
+    networks:
+    - back-tier
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+    - prometheus
+    ports:
+    - 3000:3000
+    volumes:
+    - ${DATA_ROOT}/grafana:/var/lib/grafana
+    env_file:
+    - config.monitoring
+    networks:
+    - back-tier
+    - front-tier
