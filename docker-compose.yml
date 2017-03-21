@@ -1,21 +1,22 @@
-version: "2"
+version: '2'
+
 services:
   libresonic:
     image: wonderfall/libresonic
     container_name: libresonic
     volumes:
-    - /mnt/volume-nyc1-01/data:/data
-    - /mnt/volume-nyc1-01/musics:/musics
-  nginx-proxy:
+    - ${DATA_ROOT}/libresonic/data:/data
+    - ${DATA_ROOT}/libresonic/musics:/musics
+  nginx:
     image: wonderfall/boring-nginx
     container_name: nginx
     links:
-    - libresonic:libresonic
+    - libresonic
     ports:
     - "80:8000"
     - "443:4430"
     volumes:
-    - /mnt/docker/nginx/sites-enabled:/sites-enabled
-    - /mnt/docker/nginx/conf:/conf.d
-    - /mnt/docker/nginx/log:/var/log/nginx
-    - /mnt/docker/nginx/certs:/certs
+    - ${DATA_ROOT}/nginx/sites-enabled:/sites-enabled
+    - ${DATA_ROOT}/nginx/conf:/conf.d
+    - ${DATA_ROOT}/nginx/log:/var/log/nginx
+    - ${DATA_ROOT}/nginx/certs:/certs
